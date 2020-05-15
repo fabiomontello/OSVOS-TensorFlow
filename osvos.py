@@ -17,6 +17,7 @@ import os
 import scipy.misc
 from PIL import Image
 import six
+import matplotlib.pyplot as plt
 
 slim = tf.contrib.slim
 
@@ -648,8 +649,18 @@ def test(dataset, checkpoint_file, result_path, config=None):
             image = preprocess_img(img[0])
             res = sess.run(probabilities, feed_dict={input_image: image})
             res_np = res.astype(np.float32)[0, :, :, 0] > 162.0/255.0
-            scipy.misc.imsave(os.path.join(result_path, curr_frame), res_np.astype(np.float32))
+            #scipy.misc.imsave(os.path.join(result_path, curr_frame), res_np.astype(np.float32))
             print('Saving ' + os.path.join(result_path, curr_frame))
+            #plt.imshow(res_np.astype(np.float32))
+            #plt.savefig(os.path.join(result_path, curr_frame))
 
+            # not working
+            #im = Image.fromarray(res_np.astype(np.float32))
+            #im.save(os.path.join(result_path, curr_frame) + '.png')
 
+            import imageio
+            #im = imageio.imread('imageio:astronaut.png')
+            #im.shape  # im is a numpy array
+
+            imageio.imwrite(os.path.join(result_path, curr_frame), res_np.astype(np.float32))
 

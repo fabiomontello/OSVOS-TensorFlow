@@ -26,19 +26,23 @@ os.chdir(root_folder)
 seq_name = "car-shadow"
 gpu_id = 0
 train_model = True
-result_path = os.path.join('DAVIS', 'Results', 'Segmentations', '480p', 'OSVOS', seq_name)
+#result_path = os.path.join('/content', 'OSVOS-TensorFlow', 'DAVIS', 'Results', 'Segmentations', '480p', 'OSVOS', seq_name)
+result_path = "/content/OSVOS-TensorFlow/DAVIS/Results/Segmentations/480p/OSVSOS/" + seq_name
 
 # Train parameters
-parent_path = os.path.join('models', 'OSVOS_parent', 'OSVOS_parent.ckpt-50000')
-logs_path = os.path.join('models', seq_name)
-max_training_iters = 500
+#parent_path = os.path.join('/content', 'OSVOS-TensorFlow', 'models', 'OSVOS_parent', 'OSVOS_parent.ckpt-50000')
+parent_path = "/content/OSVOS-TensorFlow/models/OSVOS_parent/OSVOS_parent.ckpt-50000"
+
+logs_path = os.path.join('/content', 'OSVOS-TensorFlow', 'models', seq_name)
+
+max_training_iters = 10
 
 # Define Dataset
-test_frames = sorted(os.listdir(os.path.join('DAVIS', 'JPEGImages', '480p', seq_name)))
-test_imgs = [os.path.join('DAVIS', 'JPEGImages', '480p', seq_name, frame) for frame in test_frames]
+test_frames = sorted(os.listdir("/content/OSVOS-TensorFlow/DAVIS/JPEGImages/480p/"+seq_name))
+test_imgs = ['/content/OSVOS-TensorFlow/DAVIS/JPEGImages/480p/' + seq_name + '/' + frame for frame in test_frames]
 if train_model:
-    train_imgs = [os.path.join('DAVIS', 'JPEGImages', '480p', seq_name, '00000.jpg')+' '+
-                  os.path.join('DAVIS', 'Annotations', '480p', seq_name, '00000.png')]
+    train_imgs = ['/content/OSVOS-TensorFlow/DAVIS/JPEGImages/480p/' + seq_name + '/' + '00000.jpg' + ' ' +
+                  '/content/OSVOS-TensorFlow/DAVIS/Annotations/480p/' + seq_name + '/' + '00000.png']
     dataset = Dataset(train_imgs, test_imgs, './', data_aug=True)
 else:
     dataset = Dataset(None, test_imgs, './')
@@ -59,16 +63,17 @@ if train_model:
 # Test the network
 with tf.Graph().as_default():
     with tf.device('/gpu:' + str(gpu_id)):
-        checkpoint_path = os.path.join('models', seq_name, seq_name+'.ckpt-'+str(max_training_iters))
+        checkpoint_path = os.path.join('/content', 'OSVOS-TensorFlow','models', seq_name, seq_name+'.ckpt-'+str(max_training_iters))
         osvos.test(dataset, checkpoint_path, result_path)
 
 # Show results
+"""
 overlay_color = [255, 0, 0]
 transparency = 0.6
 plt.ion()
 for img_p in test_frames:
     frame_num = img_p.split('.')[0]
-    img = np.array(Image.open(os.path.join('DAVIS', 'JPEGImages', '480p', seq_name, img_p)))
+    img = np.array(Image.open(os.path.join('/content', 'OSVOS-TensorFlow', 'DAVIS', 'JPEGImages', '480p', seq_name, img_p)))
     mask = np.array(Image.open(os.path.join(result_path, frame_num+'.png')))
     mask = mask//np.max(mask)
     im_over = np.ndarray(img.shape)
@@ -80,3 +85,4 @@ for img_p in test_frames:
     plt.show()
     plt.pause(0.01)
     plt.clf()
+"""
