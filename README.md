@@ -1,5 +1,5 @@
 # OSVOS: One-Shot Video Object Segmentation
-Check our [project page](http://www.vision.ee.ethz.ch/~cvlsegmentation/osvos) for additional information.
+Check the [project page](http://www.vision.ee.ethz.ch/~cvlsegmentation/osvos) for additional information.
 ![OSVOS](doc/ims/osvos.png)
 
 OSVOS is a method that tackles the task of semi-supervised video object segmentation. It is based on a fully-convolutional neural network architecture that is able to successively transfer generic semantic information, learned on ImageNet, to the task of foreground segmentation, and finally to learning the appearance of a single annotated object of the test sequence (hence one-shot). Experiments on DAVIS 2016 show that OSVOS is faster than currently available techniques and improves the state of the art by a significant margin (79.8% vs 68.0%).
